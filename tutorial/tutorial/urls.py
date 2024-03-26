@@ -15,6 +15,7 @@ urlpatterns = [
     path('healthcheck/get', views.HealthCheckViews.as_view({'get': 'get'})),
 
     path('admin/list', views.AdminViews.as_view({'get': 'list'})),
+    path('admin/user/list', views.AdminUserListView.as_view({'get': 'list'})),
     path('admin/create', views.AdminViews.as_view({'post': 'create'})),
     path('admin/retrieve/<int:pk>', views.AdminViews.as_view({'get': 'retrieve'})),
     path('admin/update/<int:pk>', views.AdminViews.as_view({'patch': 'update'})),

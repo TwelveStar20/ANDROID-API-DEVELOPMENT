@@ -472,3 +472,29 @@ class BaccaratAppViews(viewsets.ModelViewSet):
         instance.delete()
         return Response({'Message': 'Baccarat Account Deleted Duccessfully'}, status=status.HTTP_204_NO_CONTENT)
 
+
+class AdminUserListView(viewsets.ModelViewSet):
+    def list(self, request):
+        chat_apps = ChatApp.objects.all()
+        cricket_apps = CricketApp.objects.all()
+        earning_apps = EarningApp.objects.all()
+        slot_apps = SlotApp.objects.all()
+        baccarat_apps = BaccaratApp.objects.all()
+
+        chat_data = ChatAppSerializer(chat_apps, many=True).data
+        cricket_data = CricketAppSerializer(cricket_apps, many=True).data
+        earning_data = EarningAppSerializer(earning_apps, many=True).data
+        slot_data = SlotAppSerializer(slot_apps, many=True).data
+        baccarat_data = BaccaratAppSerializer(baccarat_apps, many=True).data
+
+        response_data = {
+            "message": "Result Admin User List",
+            "data": {
+                "chat_app": chat_data,
+                "cricket_app": cricket_data,
+                "earning_app": earning_data,
+                "slot_app": slot_data,
+                "baccarat_app": baccarat_data
+            }
+        }
+        return Response(response_data)
