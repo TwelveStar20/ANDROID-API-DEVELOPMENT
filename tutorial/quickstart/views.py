@@ -8,6 +8,9 @@ from rest_framework import serializers
 from rest_framework import status
 from .serializers import GroupSerializer, UserSerializer, AdminSerializer, ChatAppSerializer, CricketAppSerializer, EarningAppSerializer, SlotAppSerializer, BaccaratAppSerializer
 from .models import Admin, ChatApp, CricketApp, EarningApp, SlotApp, BaccaratApp
+from django.contrib.auth.hashers import check_password
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import AllowAny
 
 class HealthCheckViews(viewsets.ModelViewSet):
     def get(self, request, format=None):
@@ -17,13 +20,13 @@ class HealthCheckViews(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [AllowAny]
 
 
 class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all().order_by('name')
     serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [AllowAny]
 
 
 class CustomPagination(PageNumberPagination):
@@ -38,7 +41,7 @@ class CustomPagination(PageNumberPagination):
 class AdminViews(viewsets.ModelViewSet):
     queryset = Admin.objects.all().order_by('id')
     serializer_class = AdminSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [AllowAny]
     pagination_class = CustomPagination
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
 
@@ -47,6 +50,7 @@ class AdminViews(viewsets.ModelViewSet):
         if serializer.is_valid():
             serializer.save()
             response_data = {
+                'status': '200',
                 'message': 'Admin Account created successfully',
                 'data': serializer.data
             }
@@ -61,6 +65,7 @@ class AdminViews(viewsets.ModelViewSet):
             instance = self.queryset.get(pk=pk)
             serializer = self.get_serializer(instance)
             response_data = {
+                'status': '200',
                 'message': 'Result Admin Data',
                 'data': serializer.data
             }
@@ -82,6 +87,7 @@ class AdminViews(viewsets.ModelViewSet):
         queryset = self.paginate_queryset(queryset)
         serializer = self.get_serializer(queryset, many=True)
         response_data = {
+            'status': '200',
             'message': 'Result Admin Data List',
             'data': serializer.data
         }
@@ -94,6 +100,7 @@ class AdminViews(viewsets.ModelViewSet):
         if serializer.is_valid():
             serializer.save()
             response_data = {
+                'status': '200',
                 'message': 'Admin Account updated successfully',
                 'data': serializer.data
             }
@@ -111,7 +118,7 @@ class AdminViews(viewsets.ModelViewSet):
 class ChatAppViews(viewsets.ModelViewSet):
     queryset = ChatApp.objects.all().order_by('id')
     serializer_class = ChatAppSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [AllowAny]
     pagination_class = CustomPagination
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
 
@@ -120,6 +127,7 @@ class ChatAppViews(viewsets.ModelViewSet):
         if serializer.is_valid():
             serializer.save()
             response_data = {
+                'status': '200',
                 'message': 'Chat Account created successfully',
                 'data': serializer.data
             }
@@ -134,6 +142,7 @@ class ChatAppViews(viewsets.ModelViewSet):
             instance = self.queryset.get(pk=pk)
             serializer = self.get_serializer(instance)
             response_data = {
+                'status': '200',
                 'message': 'Result Chat Data',
                 'data': serializer.data
             }
@@ -155,6 +164,7 @@ class ChatAppViews(viewsets.ModelViewSet):
         queryset = self.paginate_queryset(queryset)
         serializer = self.get_serializer(queryset, many=True)
         response_data = {
+            'status': '200',
             'message': 'Result Chat Data List',
             'data': serializer.data
         }
@@ -167,6 +177,7 @@ class ChatAppViews(viewsets.ModelViewSet):
         if serializer.is_valid():
             serializer.save()
             response_data = {
+                'status': '200',
                 'message': 'Chat Account updated successfully',
                 'data': serializer.data
             }
@@ -184,7 +195,7 @@ class ChatAppViews(viewsets.ModelViewSet):
 class CricketAppViews(viewsets.ModelViewSet):
     queryset = CricketApp.objects.all().order_by('id')
     serializer_class = CricketAppSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [AllowAny]
     pagination_class = CustomPagination
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
     
@@ -193,6 +204,7 @@ class CricketAppViews(viewsets.ModelViewSet):
         if serializer.is_valid():
             serializer.save()
             response_data = {
+                'status': '200',
                 'message': 'Cricket Account created successfully',
                 'data': serializer.data
             }
@@ -207,6 +219,7 @@ class CricketAppViews(viewsets.ModelViewSet):
             instance = self.queryset.get(pk=pk)
             serializer = self.get_serializer(instance)
             response_data = {
+                'status': '200',
                 'message': 'Result Cricket Data',
                 'data': serializer.data
             }
@@ -228,6 +241,7 @@ class CricketAppViews(viewsets.ModelViewSet):
         queryset = self.paginate_queryset(queryset)
         serializer = self.get_serializer(queryset, many=True)
         response_data = {
+            'status': '200',
             'message': 'Result Cricket Data List',
             'data': serializer.data
         }
@@ -257,7 +271,7 @@ class CricketAppViews(viewsets.ModelViewSet):
 class EarningAppViews(viewsets.ModelViewSet):
     queryset = EarningApp.objects.all().order_by('id')
     serializer_class = EarningAppSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [AllowAny]
     pagination_class = CustomPagination
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
 
@@ -266,6 +280,7 @@ class EarningAppViews(viewsets.ModelViewSet):
         if serializer.is_valid():
             serializer.save()
             response_data = {
+                'status': '200',
                 'message': 'Earning Account created successfully',
                 'data': serializer.data
             }
@@ -280,6 +295,7 @@ class EarningAppViews(viewsets.ModelViewSet):
             instance = self.queryset.get(pk=pk)
             serializer = self.get_serializer(instance)
             response_data = {
+                'status': '200',
                 'message': 'Result Earning Data',
                 'data': serializer.data
             }
@@ -301,6 +317,7 @@ class EarningAppViews(viewsets.ModelViewSet):
         queryset = self.paginate_queryset(queryset)
         serializer = self.get_serializer(queryset, many=True)
         response_data = {
+            'status': '200',
             'message': 'Result Earning Data List',
             'data': serializer.data
         }
@@ -313,6 +330,7 @@ class EarningAppViews(viewsets.ModelViewSet):
         if serializer.is_valid():
             serializer.save()
             response_data = {
+                'status': '200',
                 'message': 'Earning Account updated successfully',
                 'data': serializer.data
             }
@@ -330,7 +348,7 @@ class EarningAppViews(viewsets.ModelViewSet):
 class SlotAppViews(viewsets.ModelViewSet):
     queryset = SlotApp.objects.all().order_by('id')
     serializer_class = SlotAppSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [AllowAny]
     pagination_class = CustomPagination
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
 
@@ -339,6 +357,7 @@ class SlotAppViews(viewsets.ModelViewSet):
         if serializer.is_valid():
             serializer.save()
             response_data = {
+                'status': '200',
                 'message': 'Slot Account created successfully',
                 'data': serializer.data
             }
@@ -353,6 +372,7 @@ class SlotAppViews(viewsets.ModelViewSet):
             instance = self.queryset.get(pk=pk)
             serializer = self.get_serializer(instance)
             response_data = {
+                'status': '200',
                 'message': 'Result Slot Data',
                 'data': serializer.data
             }
@@ -374,6 +394,7 @@ class SlotAppViews(viewsets.ModelViewSet):
         queryset = self.paginate_queryset(queryset)
         serializer = self.get_serializer(queryset, many=True)
         response_data = {
+            'status': '200',
             'message': 'Result Slot Data List',
             'data': serializer.data
         }
@@ -386,6 +407,7 @@ class SlotAppViews(viewsets.ModelViewSet):
         if serializer.is_valid():
             serializer.save()
             response_data = {
+                'status': '200',
                 'message': 'Slot Account updated successfully',
                 'data': serializer.data
             }
@@ -403,7 +425,7 @@ class SlotAppViews(viewsets.ModelViewSet):
 class BaccaratAppViews(viewsets.ModelViewSet):
     queryset = BaccaratApp.objects.all().order_by('id')
     serializer_class = BaccaratAppSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [AllowAny]
     pagination_class = CustomPagination
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
 
@@ -412,6 +434,7 @@ class BaccaratAppViews(viewsets.ModelViewSet):
         if serializer.is_valid():
             serializer.save()
             response_data = {
+                'status': '200',
                 'message': 'Baccarat Account created successfully',
                 'data': serializer.data
             }
@@ -426,6 +449,7 @@ class BaccaratAppViews(viewsets.ModelViewSet):
             instance = self.queryset.get(pk=pk)
             serializer = self.get_serializer(instance)
             response_data = {
+                'status': '200',
                 'message': 'Result Baccarat Data',
                 'data': serializer.data
             }
@@ -447,6 +471,7 @@ class BaccaratAppViews(viewsets.ModelViewSet):
         queryset = self.paginate_queryset(queryset)
         serializer = self.get_serializer(queryset, many=True)
         response_data = {
+            'status': '200',
             'message': 'Result Baccarat Data List',
             'data': serializer.data
         }
@@ -459,6 +484,7 @@ class BaccaratAppViews(viewsets.ModelViewSet):
         if serializer.is_valid():
             serializer.save()
             response_data = {
+                'status': '200',
                 'message': 'Baccarat Account updated successfully',
                 'data': serializer.data
             }
@@ -488,6 +514,7 @@ class AdminUserListView(viewsets.ModelViewSet):
         baccarat_data = BaccaratAppSerializer(baccarat_apps, many=True).data
 
         response_data = {
+            'status': '200',
             "message": "Result Admin User List",
             "data": {
                 "chat_app": chat_data,
@@ -498,3 +525,30 @@ class AdminUserListView(viewsets.ModelViewSet):
             }
         }
         return Response(response_data)
+
+
+class TokenObtainView(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
+    http_method_names = ['post']
+
+    def create(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+
+        if not username or not password:
+            return Response({'error': 'Please provide both username and password'}, status=400)
+
+        # For demo purposes, let's assume the user is authenticated
+        try:
+            user = Admin.objects.all().get(username=username)
+        except Admin.DoesNotExist:
+            return Response({'error': 'Invalid credentials'}, status=401)
+
+        if password == user.password:
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'access_token': str(refresh.access_token),
+                'refresh_token': str(refresh)
+            })
+
+        return Response({'error': 'Invalid credentials'}, status=401)
